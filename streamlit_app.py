@@ -7,6 +7,7 @@ import streamlit as st
 import json
 import hashlib
 from pathlib import Path
+from conap_database import consultar_conap
 
 # Configuração da página
 st.set_page_config(
@@ -75,9 +76,16 @@ CONHECIMENTO_BASE = {
 }
 
 def buscar_resposta(pergunta):
-    """Busca resposta na base de conhecimento"""
+    """Busca resposta na base de conhecimento integrada com CONAP"""
     pergunta_lower = pergunta.lower()
     
+    # Primeiro verifica se é consulta do CONAP (programas, CBO, Sistema S, etc.)
+    if any(word in pergunta_lower for word in ['programa', 'conap', 'cbo', 'senai', 'senac', 'senat', 'senar', 'sescoop', 'curso', 'aprendizagem profissional', 'ocupação']):
+        resposta_conap = consultar_conap(pergunta)
+        if resposta_conap:
+            return resposta_conap
+    
+    # Mantém as consultas tradicionais de legislação
     if any(word in pergunta_lower for word in ['gestante', 'grávida', 'gravidez', 'maternidade']):
         return CONHECIMENTO_BASE['direitos_gestante']
     elif any(word in pergunta_lower for word in ['cota', 'quantos', 'cálculo', 'percentual']):
@@ -86,16 +94,26 @@ def buscar_resposta(pergunta):
         return CONHECIMENTO_BASE['penalidades']
     else:
         return """
-        **Tópicos Disponíveis:**
+        **📚 LexAprendiz - Áreas de Consulta:**
         
+        **🏛️ LEGISLAÇÃO:**
         1. **Direitos da Gestante:** Pergunte sobre direitos da aprendiz gestante
         2. **Cota de Aprendizes:** Pergunte sobre cálculo de cotas
         3. **Penalidades:** Pergunte sobre multas e fiscalização
         
-        **Exemplos de perguntas:**
+        **📋 CONAP - PROGRAMAS DE APRENDIZAGEM:**
+        4. **Programas por Área:** Administração, Indústria, TI, Construção, Saúde, etc.
+        5. **Sistema S:** Cursos SENAI, SENAC, SENAT, SENAR, SESCOOP
+        6. **CBOs e Ocupações:** Consulte por código CBO ou nome da ocupação
+        7. **Arcos Ocupacionais:** Gestão, Indústria, Informação, Infraestrutura, etc.
+        
+        **💡 Exemplos de perguntas:**
         - "Quais os direitos da aprendiz gestante?"
         - "Como calcular a cota de aprendizes?"
-        - "Quais as penalidades por não contratar aprendizes?"
+        - "Programas de administração"
+        - "Cursos do SENAI"
+        - "CBO 4110-10"
+        - "Programas para 16 anos"
         """
 
 def main():
@@ -108,7 +126,10 @@ def main():
     st.markdown('</div>', unsafe_allow_html=True)
     
     # Informações
-    st.info("🎯 **Especialista em Legislação Brasileira da Aprendizagem**\n\nConsulte sobre direitos, deveres, cotas e penalidades relacionadas aos contratos de aprendizagem.")
+    st.info("🎯 **Especialista em Legislação Brasileira da Aprendizagem + CONAP**\n\nConsulte sobre direitos, deveres, cotas, penalidades e **programas de aprendizagem profissional** do Catálogo Nacional (CONAP).")
+    
+    # Destaque CONAP
+    st.success("📋 **NOVO!** Integração com CONAP - Consulte programas, CBOs, Sistema S (SENAI, SENAC, SENAT, SENAR) e arcos ocupacionais!")
     
     # Container do chat
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
