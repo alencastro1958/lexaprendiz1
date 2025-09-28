@@ -27,20 +27,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Base de usuários embutida (sem arquivo externo)
-ADMIN_CREDENTIALS = {
-    "email": "admin@leidaaprendizagem.com.br",
-    "senha": "21232f297a57a5a743894a0e4a801fc3",  # hash de "admin123"
-    "nome": "Administrador",
-    "tipo": "admin"
+# Base de usuários expandida com múltiplas credenciais válidas
+VALID_USERS = {
+    "admin@leidaaprendizagem.com.br": {
+        "senha": "21232f297a57a5a743894a0e4a801fc3",  # admin123
+        "nome": "Administrador Principal",
+        "tipo": "admin"
+    },
+    "diogo@leidaaprendizagem.com.br": {
+        "senha": "21232f297a57a5a743894a0e4a801fc3",  # admin123
+        "nome": "Diogo Alencastro", 
+        "tipo": "admin"
+    },
+    "alencastro1958@gmail.com": {
+        "senha": "21232f297a57a5a743894a0e4a801fc3",  # admin123
+        "nome": "Diogo Alencastro",
+        "tipo": "admin"
+    }
+}
+
+# Credenciais de emergência (texto puro para recuperação)
+EMERGENCY_CREDENTIALS = {
+    "emails": ["admin@leidaaprendizagem.com.br", "diogo@leidaaprendizagem.com.br", "alencastro1958@gmail.com"],
+    "senhas": ["admin123", "lexaprendiz2024", "diogo123"],
+    "admin_master": "admin123"
 }
 
 def authenticate(email, senha):
-    """Autenticação simples"""
-    if email == ADMIN_CREDENTIALS["email"]:
+    """Autenticação expandida com múltiplas opções"""
+    # Normalizar email
+    email = email.lower().strip()
+    
+    # Verificar usuários cadastrados
+    if email in VALID_USERS:
         senha_hash = hashlib.md5(senha.encode()).hexdigest()
-        if senha_hash == ADMIN_CREDENTIALS["senha"]:
-            return True, ADMIN_CREDENTIALS
+        if senha_hash == VALID_USERS[email]["senha"]:
+            user_data = VALID_USERS[email].copy()
+            user_data["email"] = email
+            return True, user_data
+    
+    # Verificar credenciais de emergência (senhas em texto puro)
+    if email in EMERGENCY_CREDENTIALS["emails"]:
+        if senha in EMERGENCY_CREDENTIALS["senhas"]:
+            return True, {
+                "email": email,
+                "nome": "Usuário Autorizado",
+                "tipo": "admin"
+            }
+    
     return False, None
 
 def is_logged():
@@ -53,7 +87,7 @@ def is_admin():
     return user and user.get("tipo") == "admin"
 
 def show_login():
-    """Tela de login simplificada"""
+    """Tela de login com sistema de recuperação"""
     
     st.markdown("# ⚖️ LexAprendiz")
     st.markdown("### Especialista em Legislação da Aprendizagem")
@@ -61,24 +95,114 @@ def show_login():
     st.info("🎯 **Especialista em Legislação Brasileira da Aprendizagem + CONAP**")
     st.success("📋 **Integração com CONAP** - Consulte programas, CBOs, Sistema S (SENAI, SENAC, SENAT, SENAR)")
     
-    with st.form("login"):
-        st.subheader("🔐 Acesso ao Sistema")
-        email = st.text_input("Email:", value="admin@leidaaprendizagem.com.br")
-        senha = st.text_input("Senha:", type="password", value="admin123")
-        
-        if st.form_submit_button("🚪 Entrar", use_container_width=True):
-            if email and senha:
-                success, user = authenticate(email, senha)
-                if success:
-                    st.session_state.logged_in = True
-                    st.session_state.user_data = user
-                    st.success("✅ Login realizado!")
-                    st.balloons()
+    # Tabs para Login e Recuperação
+    tab1, tab2 = st.tabs(["🔐 Login", "🔑 Recuperar Acesso"])
+    
+    with tab1:
+        with st.form("login"):
+            st.subheader("🔐 Acesso ao Sistema")
+            email = st.text_input("Email:", placeholder="Seu email de acesso")
+            senha = st.text_input("Senha:", type="password", placeholder="Sua senha")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.form_submit_button("🚪 Entrar", use_container_width=True):
+                    if email and senha:
+                        success, user = authenticate(email, senha)
+                        if success:
+                            st.session_state.logged_in = True
+                            st.session_state.user_data = user
+                            st.success("✅ Login realizado!")
+                            st.balloons()
+                            st.rerun()
+                        else:
+                            st.error("❌ Credenciais inválidas!")
+                            st.info("💡 Tente a aba 'Recuperar Acesso' se esqueceu suas credenciais")
+                    else:
+                        st.error("⚠️ Preencha todos os campos!")
+            
+            with col2:
+                if st.form_submit_button("🔑 Esqueci minha senha", use_container_width=True):
+                    st.session_state.show_recovery = True
                     st.rerun()
-                else:
-                    st.error("❌ Credenciais inválidas!")
+    
+    with tab2:
+        show_recovery_system()
+
+def show_recovery_system():
+    """Sistema de recuperação de credenciais"""
+    st.subheader("🔑 Sistema de Recuperação de Acesso")
+    
+    st.warning("⚠️ **ATENÇÃO:** Este sistema exibe credenciais para recuperação de acesso administrativo.")
+    
+    # Verificação de segurança simples
+    with st.form("recovery_form"):
+        st.markdown("**Responda a pergunta de segurança para recuperar o acesso:**")
+        
+        pergunta = st.selectbox(
+            "Qual é o nome do sistema?",
+            ["Selecione...", "LexAprendiz", "Streamlit", "Python", "Django"]
+        )
+        
+        verificacao = st.text_input("Digite 'RECUPERAR' em maiúsculas para confirmar:")
+        
+        if st.form_submit_button("🔍 Mostrar Credenciais", use_container_width=True):
+            if pergunta == "LexAprendiz" and verificacao == "RECUPERAR":
+                show_credentials_recovery()
             else:
-                st.error("⚠️ Preencha todos os campos!")
+                st.error("❌ Verificação de segurança falhou!")
+
+def show_credentials_recovery():
+    """Exibe credenciais de recuperação"""
+    st.success("✅ **Verificação aprovada! Credenciais de acesso:**")
+    
+    with st.container():
+        st.markdown("### 👑 **Credenciais de Administrador:**")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("**📧 Emails válidos:**")
+            st.code("admin@leidaaprendizagem.com.br")
+            st.code("diogo@leidaaprendizagem.com.br")  
+            st.code("alencastro1958@gmail.com")
+        
+        with col2:
+            st.markdown("**🔑 Senhas válidas:**")
+            st.code("admin123")
+            st.code("lexaprendiz2024")
+            st.code("diogo123")
+    
+    st.info("💡 **Como usar:** Escolha qualquer email + qualquer senha da lista acima")
+    
+    # Botão de teste rápido
+    st.markdown("### 🚀 **Teste Rápido:**")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("🎯 Testar Admin Principal", use_container_width=True):
+            test_login("admin@leidaaprendizagem.com.br", "admin123")
+    
+    with col2:
+        if st.button("🎯 Testar Diogo", use_container_width=True):
+            test_login("diogo@leidaaprendizagem.com.br", "admin123")
+    
+    with col3:
+        if st.button("🎯 Testar Alternativo", use_container_width=True):
+            test_login("alencastro1958@gmail.com", "lexaprendiz2024")
+
+def test_login(email, senha):
+    """Testa login automático"""
+    success, user = authenticate(email, senha)
+    if success:
+        st.session_state.logged_in = True
+        st.session_state.user_data = user
+        st.success(f"✅ Login automático realizado como {user['nome']}!")
+        st.balloons()
+        st.rerun()
+    else:
+        st.error("❌ Erro no login automático!")
 
 def show_main():
     """Interface principal"""
