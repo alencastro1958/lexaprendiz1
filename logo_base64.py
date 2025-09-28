@@ -29,8 +29,10 @@ def show_logo_uploader():
         if st.button("🗑️ Remover Logo Atual", use_container_width=True):
             if 'lexaprendiz_logo' in st.session_state:
                 del st.session_state.lexaprendiz_logo
-            st.success("Logo removida com sucesso!")
-            st.rerun()
+                st.success("Logo removida com sucesso!")
+                st.info("🔄 Recarregue a página para ver as mudanças.")
+            else:
+                st.warning("Nenhuma logo para remover.")
     
     # Uploader sempre visível no dashboard
     uploaded_file = st.file_uploader(

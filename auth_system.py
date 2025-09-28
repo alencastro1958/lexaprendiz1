@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+from app_stability import safe_logout, safe_state_update, prevent_dom_conflicts
 
 # Arquivo para armazenar usuários
 USERS_FILE = Path("users_database.json")
@@ -133,7 +134,6 @@ def show_login_form():
         with col2:
             if st.form_submit_button("📝 Criar Conta", use_container_width=True):
                 st.session_state.show_register = True
-                st.rerun()
         
         if login_button:
             if email and senha:
@@ -146,7 +146,7 @@ def show_login_form():
                     st.session_state.user_name = user_data["nome"]
                     st.session_state.user_type = user_data["tipo"]
                     st.success(message)
-                    st.rerun()
+                    st.balloons()
                 else:
                     st.error(message)
             else:
@@ -169,7 +169,6 @@ def show_register_form():
         with col2:
             if st.form_submit_button("🔙 Voltar ao Login", use_container_width=True):
                 st.session_state.show_register = False
-                st.rerun()
         
         if register_button:
             if all([nome, cpf, email, senha, confirmar_senha]):
@@ -182,7 +181,7 @@ def show_register_form():
                         st.success(message)
                         st.info("Agora você pode fazer login!")
                         st.session_state.show_register = False
-                        st.rerun()
+                        st.balloons()
                     else:
                         st.error(message)
             else:
@@ -266,5 +265,4 @@ def show_user_info():
         st.markdown(f"*{user_type.title()}*")
         
         if st.button("🚪 Logout", use_container_width=True):
-            logout_user()
-            st.rerun()
+            safe_logout()

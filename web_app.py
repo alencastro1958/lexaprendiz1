@@ -30,7 +30,8 @@ Siste    # Sidebar - Informações do usuário
             content = load_content_settings()
             content["theme_mode"] = selected_theme
             save_content_settings(content)
-            st.rerun()
+            st.info("🎨 Tema alterado! Recarregue a página para ver o novo estilo.")
+            st.balloons()
         
         st.markdown("---")
         
