@@ -298,65 +298,255 @@ def show_chat():
         st.caption("Sistema LexAprendiz v4.0")
 
 def get_response(pergunta):
-    """Base de conhecimento embutida"""
+    """Base de conhecimento expandida e especializada"""
     p = pergunta.lower()
     
-    if any(word in p for word in ['gestante', 'grávida', 'gravidez']):
-        return """**🤰 Direitos da Aprendiz Gestante:**
-        
-1. **Estabilidade:** Desde confirmação da gravidez até 5 meses pós-parto
-2. **Licença-maternidade:** 120 dias remunerada  
-3. **Consultas médicas:** Dispensa para pré-natal sem desconto
-4. **Mudança de função:** Se necessário, para função compatível
-5. **Proteção:** Não pode ser demitida sem justa causa
+    # ESTABELECIMENTOS PROIBIDOS
+    if any(word in p for word in ['proibido', 'proibidos', 'não pode', 'impossibilitado', 'vedado', 'impedido']):
+        return """**🚫 Estabelecimentos Proibidos de Contratar Aprendizes:**
 
-**Base Legal:** CLT Art. 391-A, Lei 11.788/2008"""
-    
-    elif any(word in p for word in ['cota', 'quantos', 'cálculo']):
+**❌ EMPRESAS DISPENSADAS DA COTA:**
+1. **Microempresas (ME)** - até 9 empregados
+2. **Empresas de Pequeno Porte (EPP)** - 10 a 99 empregados (opcional)
+3. **Entidades sem fins lucrativos** que tenham por objetivo educação profissional
+4. **Órgãos da administração direta** (União, Estados, Municípios)
+
+**🚫 ATIVIDADES COM RESTRIÇÕES:**
+- **Trabalho perigoso** (menores de 18 anos)
+- **Trabalho insalubre** (menores de 18 anos)  
+- **Trabalho noturno** (menores de 18 anos)
+- **Atividades prejudiciais** à formação moral
+
+**⚠️ SITUAÇÕES ESPECIAIS:**
+- **Empresas em recuperação judicial** (podem ter suspensão temporária)
+- **Estabelecimentos em reestruturação** (análise caso a caso)
+
+**Base Legal:** Lei 10.097/2000, Art. 429; CLT Art. 403-405; Decreto 5.598/2005"""
+
+    # DIREITOS DA GESTANTE
+    elif any(word in p for word in ['gestante', 'grávida', 'gravidez', 'maternidade']):
+        return """**🤰 Direitos da Aprendiz Gestante:**
+
+1. **Estabilidade Provisória:** Desde confirmação da gravidez até 5 meses após o parto
+2. **Licença-Maternidade:** 120 dias remunerada (pode ser estendida por mais 60 dias)
+3. **Consultas e Exames:** Dispensa para pré-natal sem desconto salarial
+4. **Mudança de Função:** Se atividade for incompatível com a gestação
+5. **Proteção contra Demissão:** Vedada demissão sem justa causa
+6. **Amamentação:** Dois intervalos de 30 minutos até 6 meses do bebê
+7. **Retorno Garantido:** Direito de retornar à mesma função
+
+**⚠️ ATENÇÃO:** Contrato de aprendizagem não pode ser rescindido durante gravidez e estabilidade.
+
+**Base Legal:** CLT Art. 391-A, 392, 396; Lei 11.788/2008; CF Art. 7º, XVIII"""
+
+    # CÁLCULO DE COTAS
+    elif any(word in p for word in ['cota', 'quantos', 'cálculo', 'percentual', 'proporção']):
         return """**📊 Cálculo de Cota de Aprendizes:**
 
-- **Percentual:** 5% a 15% do total de funcionários
-- **Base:** Funções que demandem formação profissional
-- **Idade:** 14 a 24 anos (sem limite para PCD)
-- **Duração:** 6 meses a 2 anos
+**📋 REGRA GERAL:**
+- **Mínimo:** 5% dos empregados por estabelecimento
+- **Máximo:** 15% dos empregados por estabelecimento
+- **Base de cálculo:** Funções que demandem formação profissional
 
-**Exemplos:**
+**👥 EXEMPLOS PRÁTICOS:**
+- 20 funcionários = 1 a 3 aprendizes
+- 50 funcionários = 3 a 8 aprendizes  
 - 100 funcionários = 5 a 15 aprendizes
-- 50 funcionários = 3 a 8 aprendizes
+- 200 funcionários = 10 a 30 aprendizes
 
-**Base Legal:** Lei 10.097/2000, Decreto 5.598/2005"""
-    
-    elif any(word in p for word in ['multa', 'penalidade', 'fiscalização']):
+**🎯 CRITÉRIOS DE IDADE:**
+- **Regra geral:** 14 a 24 anos incompletos
+- **Pessoas com deficiência:** Sem limite de idade
+
+**⏱️ DURAÇÃO DO CONTRATO:**
+- **Mínimo:** 6 meses
+- **Máximo:** 2 anos (exceto PCD, que pode ser mais)
+
+**Base Legal:** Lei 10.097/2000, Art. 429; Decreto 5.598/2005, Art. 11"""
+
+    # PENALIDADES E MULTAS
+    elif any(word in p for word in ['multa', 'penalidade', 'fiscalização', 'autuação', 'infração']):
         return """**⚖️ Penalidades por Descumprimento:**
 
-1. **Multa:** R$ 402,53 a R$ 4.025,33 por aprendiz não contratado
-2. **Auto de Infração:** Fiscalização do trabalho
-3. **TAC:** Termo de Ajustamento com MPT
-4. **Ação Civil:** Indenização por danos morais coletivos
+**💰 VALORES DAS MULTAS (2024):**
+- **Por aprendiz não contratado:** R$ 402,53 a R$ 4.025,33
+- **Reincidência:** Valor dobrado
+- **Má-fé ou resistência:** Agravantes adicionais
 
-**Base Legal:** CLT Art. 434, Portaria 723/2012"""
-    
-    elif any(word in p for word in ['conap', 'programa', 'senai', 'senac']):
-        return """**📋 CONAP - Catálogo Nacional:**
+**🔍 TIPOS DE FISCALIZAÇÃO:**
+1. **Auto de Infração:** Auditores-fiscais do trabalho
+2. **TAC:** Termo de Ajustamento de Conduta (MPT)
+3. **Ação Civil Pública:** Indenização por danos morais coletivos
+4. **Embargo/Interdição:** Em casos graves
 
-**Sistema S Disponível:**
-- **SENAI:** Programas industriais e técnicos
-- **SENAC:** Comércio e serviços  
-- **SENAT:** Transporte e logística
-- **SENAR:** Agronegócio e rural
-- **SESCOOP:** Cooperativismo
+**⚠️ CONSEQUÊNCIAS ADICIONAIS:**
+- **Cadastro de inadimplentes** em órgãos públicos
+- **Impedimento** para participar de licitações
+- **Restrições** para financiamentos públicos
+- **Execução fiscal** em caso de não pagamento
 
-**Consultas:** Programas por área, CBOs, carga horária, faixa etária"""
-    
+**Base Legal:** CLT Art. 434; Lei 6.514/77; Portaria MTE 723/2012"""
+
+    # CONAP E PROGRAMAS
+    elif any(word in p for word in ['conap', 'programa', 'senai', 'senac', 'senat', 'senar', 'sescoop', 'sistema s']):
+        return """**📋 CONAP - Catálogo Nacional de Programas:**
+
+**🏫 SISTEMA S - INSTITUIÇÕES FORMADORAS:**
+- **SENAI:** Indústria (metalurgia, construção, tecnologia)
+- **SENAC:** Comércio e serviços (administração, vendas, turismo)
+- **SENAT:** Transporte (logística, condutores, manutenção)
+- **SENAR:** Agronegócio (agricultura, pecuária, cooperativismo)
+- **SESCOOP:** Cooperativismo (gestão, educação cooperativa)
+
+**📚 PRINCIPAIS ARCOS OCUPACIONAIS:**
+1. **Administração e Gestão**
+2. **Tecnologia da Informação** 
+3. **Indústria Metalúrgica**
+4. **Construção Civil**
+5. **Comércio e Vendas**
+6. **Saúde e Bem-estar**
+7. **Logística e Transporte**
+
+**🎯 INFORMAÇÕES DISPONÍVEIS:**
+- **CBO associada** a cada programa
+- **Carga horária** (mín. 400h teóricas)
+- **Faixa etária** recomendada
+- **Descrição sumária** das atividades
+- **Competências** a serem desenvolvidas
+
+**Base Legal:** Portaria MTE 723/2012; CONAP 2021"""
+
+    # CONTRATOS E FORMALIZAÇÃO
+    elif any(word in p for word in ['contrato', 'formalizar', 'ctps', 'registro', 'documentação']):
+        return """**📝 Contrato de Aprendizagem:**
+
+**📋 DOCUMENTOS OBRIGATÓRIOS:**
+1. **Contrato escrito** com prazo determinado
+2. **Registro na CTPS** na coluna "Anotações Gerais"
+3. **Matrícula** em programa de aprendizagem
+4. **Certificado** de frequência escolar (se menor de 18)
+
+**⏱️ PRAZOS E REGISTROS:**
+- **Registro MTE:** Até 30 dias após admissão
+- **CAGED:** Informar admissão como aprendiz
+- **eSocial:** Código específico para aprendizagem (S-2200)
+
+**💰 REMUNERAÇÃO:**
+- **Mínimo:** Salário mínimo/hora proporcional
+- **Pode ser superior** conforme política da empresa
+- **13º salário, férias e FGTS:** Direitos garantidos
+
+**🎓 CERTIFICAÇÃO:**
+- **Certificado profissional** ao final do programa
+- **Registro no MTE** da conclusão
+- **Possibilidade** de efetivação pela empresa
+
+**Base Legal:** CLT Art. 428-433; Lei 10.097/2000; Decreto 5.598/2005"""
+
+    # PESSOAS COM DEFICIÊNCIA
+    elif any(word in p for word in ['deficiência', 'deficiente', 'pcd', 'inclusão', 'acessibilidade']):
+        return """**♿ Aprendizagem para Pessoas com Deficiência:**
+
+**🎯 REGRAS ESPECIAIS:**
+- **Sem limite de idade** para início
+- **Contrato pode exceder 2 anos** se necessário
+- **Carga horária adaptada** às necessidades
+- **Avaliação individualizada** das competências
+
+**📊 COTAS ESPECÍFICAS:**
+- **Podem compor** os percentuais gerais (5%-15%)
+- **Incentivo** para contratação além da cota mínima
+- **Flexibilização** de requisitos quando necessário
+
+**🏢 ADAPTAÇÕES OBRIGATÓRIAS:**
+1. **Acessibilidade física** no local de trabalho
+2. **Tecnologia assistiva** quando necessária  
+3. **Adequação** de jornada e atividades
+4. **Apoio especializado** durante aprendizagem
+
+**🎓 PROGRAMAS ESPECÍFICOS:**
+- **SENAI:** Programas adaptados por deficiência
+- **Instituições especializadas** conveniadas
+- **Metodologias inclusivas** certificadas
+
+**Base Legal:** Lei 13.146/2015 (LBI); Decreto 5.598/2005; Lei 8.213/91"""
+
+    # JORNADA E HORÁRIOS  
+    elif any(word in p for word in ['jornada', 'horário', 'horas', 'trabalho', 'período']):
+        return """**⏰ Jornada de Trabalho do Aprendiz:**
+
+**📚 APRENDIZ ESTUDANTE:**
+- **Máximo 6h/dia** - se estuda
+- **Não pode** trabalhar em horário escolar
+- **Educação** tem prioridade sempre
+
+**🎓 APRENDIZ NÃO ESTUDANTE:**
+- **Máximo 8h/dia** - se completou ensino médio
+- **Incluídas** as horas de capacitação teórica
+- **Divisão** entre empresa e entidade formadora
+
+**🚫 PROIBIÇÕES:**
+- **Trabalho noturno** (22h às 5h) para menores de 18
+- **Horas extras** são vedadas
+- **Compensação** de jornada não permitida
+- **Trabalho aos domingos** salvo necessidade técnica
+
+**📊 DISTRIBUIÇÃO TÍPICA:**
+- **Teoria:** Mínimo 20% da jornada (400h/ano)
+- **Prática:** Na empresa aplicando conhecimentos
+- **Avaliação:** Contínua em ambos ambientes
+
+**Base Legal:** CLT Art. 432; CF Art. 7º, XIII; Decreto 5.598/2005"""
+
+    # RESCISÃO E TÉRMINO
+    elif any(word in p for word in ['rescisão', 'demissão', 'término', 'fim', 'acabar']):
+        return """**🔚 Rescisão do Contrato de Aprendizagem:**
+
+**✅ SITUAÇÕES PERMITIDAS:**
+1. **Término natural** do prazo contratual
+2. **Antecipação** aos 24 anos (se não PCD)
+3. **Conclusão** do programa de aprendizagem
+4. **Baixo desempenho** comprovado
+5. **Falta disciplinar grave**
+6. **Ausência injustificada** à escola (se estudante)
+
+**❌ VEDAÇÕES:**
+- **Demissão sem justa causa** de gestante
+- **Rescisão discriminatória** 
+- **Término antecipado** sem justificativa legal
+- **Dispensa** por redução de quadro
+
+**💰 VERBAS RESCISÓRIAS:**
+- **Saldo de salário**
+- **Férias proporcionais + 1/3**
+- **13º salário proporcional**
+- **FGTS + 40%** (se sem justa causa)
+- **Aviso prévio** (se aplicável)
+
+**🎓 CERTIFICAÇÃO:**
+- **Sempre obrigatória** mesmo em rescisão antecipada
+- **Registro das competências** desenvolvidas
+- **Aproveitamento** em futuros programas
+
+**Base Legal:** CLT Art. 433; Lei 10.097/2000; TST Súmula 331"""
+
+    # RESPOSTA GENÉRICA EXPANDIDA
     else:
-        return """**🎯 Tópicos Disponíveis:**
+        return """**🎯 Tópicos Especializados Disponíveis:**
 
-1. **👶 Direitos da Gestante:** "Quais os direitos da aprendiz gestante?"
-2. **📊 Cota de Aprendizes:** "Como calcular cota de aprendizes?"  
-3. **⚖️ Penalidades:** "Penalidades por não contratar aprendizes"
-4. **📋 CONAP:** "Programas do SENAI", "CBO 4110-10"
+**🚫 Estabelecimentos:** "Estabelecimentos proibidos de contratar aprendizes"
+**🤰 Gestante:** "Direitos da aprendiz gestante"  
+**📊 Cotas:** "Como calcular cota de aprendizes"
+**⚖️ Penalidades:** "Multas por não contratar aprendizes"
+**📋 CONAP:** "Programas do SENAI", "Sistema S"
+**📝 Contratos:** "Como formalizar contrato de aprendizagem"
+**♿ PCD:** "Aprendizagem para pessoas com deficiência"
+**⏰ Jornada:** "Horário de trabalho do aprendiz"
+**🔚 Rescisão:** "Como rescindir contrato de aprendizagem"
 
-**Base:** Lei 10.097/2000, CLT, CONAP 2021"""
+**💡 Exemplo:** Digite "Estabelecimentos proibidos" ou "Jornada de trabalho"
+
+**📚 Base Legal Completa:** Lei 10.097/2000, CLT Arts. 428-433, Decreto 5.598/2005, CONAP 2021"""
 
 def main():
     """Função principal ultra-simplificada"""
