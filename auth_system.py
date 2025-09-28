@@ -109,6 +109,10 @@ def authenticate_user(email, senha):
     
     return True, user, "Login realizado com sucesso!"
 
+def is_authenticated():
+    """Verifica se usuário está logado"""
+    return st.session_state.get("logged_in", False) and st.session_state.get("user_data") is not None
+
 def is_admin(user):
     """Verifica se usuário é admin"""
     return user and user.get("tipo") == "admin"

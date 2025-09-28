@@ -11,13 +11,20 @@ from conap_database import consultar_conap
 try:
     from auth_system import *
     from content_manager import *
-    from logo_base64 import get_lexaprendiz_logo
+    from logo_base64 import get_uploaded_logo, get_initial_logo
     from banco_conhecimento import BancoConhecimentoAprendizagem
     from ferramentas_juridicas import PesquisadorJuridico
     AUTH_AVAILABLE = True
 except ImportError as e:
     st.error(f"⚠️ Erro ao importar módulos: {e}")
     AUTH_AVAILABLE = False
+
+def get_lexaprendiz_logo():
+    """Função wrapper para obter logo"""
+    logo = get_uploaded_logo()
+    if not logo:
+        logo = get_initial_logo()
+    return logo
 
 # Configuração da página
 st.set_page_config(
