@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "adk-em-5-minutos"
+version = "0.1.0"
+description = "ADK (Agent Development Kit) em 5 Minutos"
+authors = [{name = "Diogo", email = "diogo@example.com"}]
+dependencies = [
+    "streamlit",
+    "requests",
+    "beautifulsoup4",
+    "lxml",
+    "python-dateutil",
+]
+requires-python = ">=3.8"
+
+[project.scripts]
+adk = "main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.uv]
+dev-dependencies = []

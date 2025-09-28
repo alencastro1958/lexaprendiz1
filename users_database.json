@@ -1,0 +1,18 @@
+{
+    "admin@leidaaprendizagem.com.br": {
+        "nome": "Administrador",
+        "cpf": "000.000.000-00",
+        "email": "admin@leidaaprendizagem.com.br",
+        "senha": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+        "tipo": "admin",
+        "data_cadastro": "2025-09-28"
+    },
+    "diogo@leidaaprendizagem.com.br": {
+        "nome": "Diogo Luís Alencastro da Silva",
+        "cpf": "253.251.590-20",
+        "email": "diogo@leidaaprendizagem.com.br",
+        "senha": "bd7b1972970f684b3eda5531eb71d2e901db07d0f0758685a8f4c07615f9ef03",
+        "tipo": "usuario",
+        "data_cadastro": "2025-09-28"
+    }
+}

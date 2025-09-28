@@ -1,0 +1,27 @@
+{
+    "main_title": "Conheça o LexAprendiz",
+    "main_description": "Obtenha respostas rápidas e precisas para suas perguntas. Nosso Agente LexAprendiz agora usa a tecnologia Gemini 2.5 flash para fornecer esclarecimentos sobre a legislação de forma interativa e com fontes confidenciais.",
+    "chat_title": "💬 Converse com o LexAprendiz",
+    "sidebar_user_title": "👤 Usuário",
+    "sidebar_agents_title": "📋 Agentes Disponíveis",
+    "sidebar_admin_title": "🛠️ Dashboard Admin",
+    "agent_name": "LexAprendiz",
+    "agent_model": "gemini-2.5-flash",
+    "agent_description": "Agente especializado em legislação da aprendizagem no Brasil",
+    "specialties": [
+        "• Cálculo de cotas de aprendizes",
+        "• Direitos e deveres de aprendizes",
+        "• Legislação trabalhista específica",
+        "• Fiscalização e auditoria",
+        "• Portarias e decretos atualizados"
+    ],
+    "login_title": "🔒 Acesso Restrito",
+    "login_subtitle": "Esta área requer autenticação. Faça login ou crie uma conta para continuar.",
+    "theme_mode": "dark",
+    "main_title_font_size": "2.2em",
+    "main_description_font_size": "1.1em",
+    "chat_title_font_size": "2.0em",
+    "content_max_width": "800px",
+    "description_height": "auto",
+    "last_updated": "2025-09-28"
+}
